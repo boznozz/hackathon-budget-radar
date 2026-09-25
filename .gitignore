@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual env
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+.env.local
+
+# Data (large files)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/*.duckdb
+data/*.duckdb.wal
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Playwright
+playwright-report/
+test-results/

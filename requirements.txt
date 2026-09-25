@@ -1,0 +1,15 @@
+streamlit
+duckdb
+pandas
+numpy
+prophet
+scikit-learn
+plotly
+requests
+beautifulsoup4
+lxml
+playwright
+yfinance
+pyarrow
+openpyxl
+pdfplumber
