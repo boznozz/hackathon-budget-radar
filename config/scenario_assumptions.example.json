@@ -1,0 +1,12 @@
+{
+  "name": "Illustrative oil and FX stress",
+  "assumption_source": "Illustrative elasticities only; replace with approved estimates before decisions",
+  "shocks": [
+    {"indicator": "brent", "pct_change": 25},
+    {"indicator": "eur_tnd", "pct_change": 10}
+  ],
+  "exposures": [
+    {"indicator": "brent", "budget_item_key": "economic:Subventions", "elasticity": 0.3},
+    {"indicator": "eur_tnd", "budget_item_key": "economic:Subventions", "elasticity": 0.1}
+  ]
+}

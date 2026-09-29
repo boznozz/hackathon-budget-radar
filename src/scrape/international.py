@@ -3,31 +3,14 @@ Scrape international indicators: Brent, Gold, EUR/TND, USD/TND via Yahoo Finance
 plus World Bank macro indicators for Tunisia.
 All free, no API key required.
 """
-import os
-import yfinance as yf
+from pathlib import Path
+
 import pandas as pd
 import requests
+import yfinance as yf
 
-RAW_DIR = "data/raw"
-os.makedirs(RAW_DIR, exist_ok=True)
-
-
-def fetch_yahoo(ticker: str, name: str, period: str = "5y", interval: str = "1mo"):
-    """Download a Yahoo Finance series and save as CSV."""
-    print(f"[yahoo] fetching {name} ({ticker})...")
-    df = yf.download(ticker, period=period, interval=interval, progress=False)
-    if df.empty:
-        print(f"[yahoo] WARNING: no data for {ticker}")
-        return None
-    # Flatten MultiIndex columns if present
-    if isinstance(df.columns, pd.MultiIndex):
-        df.columns = df.columns.get_level_values(0)
-    df = df.reset_index()
-    df.columns = [c.lower().replace(" ", "_") for c in df.columns]
-    out = f"{RAW_DIR}/{name}.csv"
-    df.to_csv(out, index=False)
-    print(f"[yahoo] saved {out} ({len(df)} rows)")
-    return df
+RAW_DIR = Path(__file__).resolve().parents[2] / "data" / "raw"
+RAW_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def fetch_world_bank(indicator: str, name: str):
@@ -55,10 +38,28 @@ def fetch_world_bank(indicator: str, name: str):
         if item.get("value") is not None
     ]
     df = pd.DataFrame(rows)
-    out = f"{RAW_DIR}/wb_{name}.csv"
+    out = RAW_DIR / f"wb_{name}.csv"
     df.to_csv(out, index=False)
     print(f"[worldbank] saved {out} ({len(df)} rows)")
     return df
+
+def fetch_yahoo(ticker: str, name: str, period: str = "5y", interval: str = "1mo"):
+    """Download a Yahoo Finance series and save as CSV."""
+    print(f"[yahoo] fetching {name} ({ticker})...")
+    df = yf.download(ticker, period=period, interval=interval, progress=False)
+    if df.empty:
+        print(f"[yahoo] WARNING: no data for {ticker}")
+        return None
+    # Flatten MultiIndex columns if present
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = df.columns.get_level_values(0)
+    df = df.reset_index()
+    df.columns = [c.lower().replace(" ", "_") for c in df.columns]
+    out = RAW_DIR / f"{name}.csv"
+    df.to_csv(out, index=False)
+    print(f"[yahoo] saved {out} ({len(df)} rows)")
+    return df
+
 
 
 def main():
